@@ -1,6 +1,9 @@
-from flask import Flask, request, render_template, redirect, url_for, session, flash
-import datetime, json, hashlib, os
+import os
+import json
+import hashlib
+import datetime
 from functools import wraps
+from flask import Flask, request, render_template, redirect, url_for, session, flash
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "replace-this-with-env-var")
@@ -102,3 +105,8 @@ def log():
         f.write(json.dumps(data) + "\n")
 
     return "OK"
+
+# --- Flask App Start (Render-compatible) ---
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)

